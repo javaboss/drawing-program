@@ -1,0 +1,12 @@
+apply plugin: 'scala'
+
+jar {
+    baseName = 'drawing-program'
+    version = '1.0.0'
+}
+
+dependencies {
+    implementation libs.scala
+
+    testImplementation libs.test.scalatest
+}

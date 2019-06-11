@@ -1,0 +1,10 @@
+ext {
+    libs = [
+
+            scala : 'org.scala-lang:scala-library:2.12.6',
+
+            test  : [
+                    scalatest  : 'org.scalatest:scalatest_2.12:3.0.5'
+            ]
+    ]
+}
