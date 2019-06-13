@@ -46,10 +46,6 @@ object DrawingProgram extends App {
           return new Canvas(params(1).toInt, params(2).toInt)
         }
 
-        case "L" => {
-
-        }
-
         case _ => throw new IllegalArgumentException("Incorrect command format")
       }
 

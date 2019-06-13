@@ -1,8 +1,8 @@
 package com.db.drawing
 
-import org.scalatest._
+import org.scalatest.FlatSpec
 
-class DrawingSpec extends FlatSpec {
+class CanvasSpec extends FlatSpec {
   "With an account we" can "deposit an amount to increase the balance" in {
 
     assert(true)
