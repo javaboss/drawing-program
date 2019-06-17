@@ -8,7 +8,7 @@ object DrawingProgram extends App {
   var command: String = ""
 
   while (command != "q") {
-    println("Command: ")
+    println("enter command: ")
 
     command = readLine()
 
@@ -22,8 +22,7 @@ object DrawingProgram extends App {
 
     for (i <- params) println("Split: '" + i + "'")
 
-    val processor = new CommandProcessor(params)
-    val c = processor.process()
+    val canvas = new CommandProcessor(params).process()
   }
 
   class CommandProcessor(params: List[String]) {
@@ -34,21 +33,24 @@ object DrawingProgram extends App {
       val command = params(0)
 
       command.toUpperCase match {
-        case "Q" => {
+        case "Q" =>
           println("Quit")
           return new Canvas(0,0)
-        }
 
-        case "C" => {
-          if (params.length < 3) throw new IllegalArgumentException("Incorrect parameters")
+        case "C" =>
+          if (params.length < 3) throw new IllegalArgumentException("C: Incorrect parameters")
 
           println("New Canvas")
           return new Canvas(params(1).toInt, params(2).toInt)
-        }
+/*
+        case "L" =>
+          if (params.length < 4) throw new IllegalArgumentException("L: Incorrect parameters")
 
+          println("Line")
+          return new Canv
+*/
         case _ => throw new IllegalArgumentException("Incorrect command format")
       }
-
     }
   }
 }
