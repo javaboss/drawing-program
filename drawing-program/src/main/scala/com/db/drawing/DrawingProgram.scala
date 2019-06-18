@@ -5,49 +5,55 @@ import scala.io.StdIn.readLine
 object DrawingProgram extends App {
   println("Drawing Program")
 
-  var command: String = ""
+  var input: String = ""
 
-  while (command != "q") {
+  while (input != "Q") {
     println("enter command: ")
 
-    command = readLine()
+    input = readLine()
 
-    println("Line: " + command)
+    val c = new Command(input)
+    input = c.command
 
-    val params = command.split(" ").toList
-
-    println("params size = " + params.size)
-    println("params length = " + params.length)
-    println("params is empty? " + params.isEmpty)
-
-    for (i <- params) println("Split: '" + i + "'")
-
-    val canvas = new CommandProcessor(params).process()
+    if (input != "Q") {
+      val canvas = new CommandProcessor(c).process()
+      canvas.print()
+    }
   }
 
-  class CommandProcessor(params: List[String]) {
+  class Command(input: String) {
+    private val args = input.split(" ").toList
+
+    val command: String = args(0).toUpperCase
+    val params: List[Int] = args.drop(1).map(_.toInt)
+
+    println("COMMAND: " + command)
+    println("PARAMS")
+    for (i <- params) println(i)
+  }
+
+  class CommandProcessor(c: Command) {
+
+    if (c.command != "Q" && c.params.length == 0)
+      throw new IllegalArgumentException("Incorrect command format")
+
     def process(): Canvas = {
-      if (params(0).toUpperCase != "Q" && params.length == 1)
-          throw new IllegalArgumentException("Incorrect command format")
-
-      val command = params(0)
-
-      command.toUpperCase match {
+      c.command match {
         case "Q" =>
           println("Quit")
           return new Canvas(0,0)
 
         case "C" =>
-          if (params.length < 3) throw new IllegalArgumentException("C: Incorrect parameters")
+          if (c.params.length < 3) throw new IllegalArgumentException("C: Incorrect parameters")
 
           println("New Canvas")
-          return new Canvas(params(1).toInt, params(2).toInt)
+          return new Canvas((c.params(1), c.params(2)))
 /*
         case "L" =>
           if (params.length < 4) throw new IllegalArgumentException("L: Incorrect parameters")
 
           println("Line")
-          return new Canv
+          return new Canvas(params(1).toInt, params(2).toInt, params(3).toInt, params(4).toInt)
 */
         case _ => throw new IllegalArgumentException("Incorrect command format")
       }

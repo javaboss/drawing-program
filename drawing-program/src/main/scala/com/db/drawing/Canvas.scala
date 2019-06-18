@@ -1,18 +1,19 @@
 package com.db.drawing
 
-object Canvas {
+abstract class AbstractCanvas(size: (Int, Int)) {
+  protected val dimX = size._1 + 2
+  protected val dimY = size._2 + 2
+
+  protected val matrix = Array.ofDim[Char](dimY, dimX)
 }
 
-class Canvas(val width: Int, val height: Int) {
+class Canvas(size: (Int, Int)) extends AbstractCanvas(size)  {
 
-  private val dimX = width + 2
-  private val dimY = height + 2
-
-  private val matrix = Array.ofDim[Char](dimY, dimX)
+  val (width, height) = size
 
   if (width < 0 || height < 0) throw new IllegalArgumentException("Canvas size cannot be negative")
 
-  println(s"Canvas [x = $width], [y = $height]")
+  println(s"Canvas [x = ${width}], [y = ${height}]")
   createBorder()
 
   private def createBorder(): Unit = {
