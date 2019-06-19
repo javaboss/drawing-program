@@ -8,59 +8,48 @@ object DrawingProgram extends App {
   var input: String = ""
   var canvas = new Canvas
 
-  while (input != "Q") {
+  while (true) {
     println("enter command: ")
 
     input = readLine()
 
-    val command = new Command(input)
-    input = command.command
+    val args = new Args(input)
+    input = args.command
 
-    if (input != "Q") {
-      canvas = new CommandProcessor(command, canvas).process()
-      canvas.print()
-    }
+    canvas = new CommandProcessor(args, canvas).process()
+    canvas.print()
   }
+}
 
-  class Command(input: String) {
-    private val args = input.split(" ").toList
+class CommandProcessor(args: Args, canvas: Canvas) {
 
-    val command: String = args(0).toUpperCase
-    val params: List[Int] = args.drop(1).map(_.toInt)
-  }
+  if (args.command != "Q" && args.params.length == 0)
+    throw new IllegalArgumentException("Incorrect command format")
 
-  class CommandProcessor(c: Command, canvas: Canvas) {
+  def process(): Canvas = {
+    args.command match {
+      case "Q" =>
+        val c = new QuitCommand(args, canvas)
+        if (c.validate) c.execute()
+        System.exit(0)
 
-    if (c.command != "Q" && c.params.length == 0)
-      throw new IllegalArgumentException("Incorrect command format")
+      case "C" =>
+        if (args.params.length < 2) throw new IllegalArgumentException("C: Incorrect parameters")
 
-    def process(): Canvas = {
-      c.command match {
-        case "Q" =>
-          println("Quit")
+        println("New Canvas")
+        return new Canvas((args.params(0), args.params(1)))
 
-        case "C" =>
-          if (c.params.length < 2) throw new IllegalArgumentException("C: Incorrect parameters")
+      case "L" =>
+        val c = new LineCommand(args, canvas)
+        if (c.validate) c.execute()
 
-          println("New Canvas")
-          return new Canvas((c.params(0), c.params(1)))
+      case "R" =>
+        val c = new RectangleCommand(args, canvas)
+        if (c.validate) c.execute()
 
-        case "L" =>
-          if (c.params.length < 4) throw new IllegalArgumentException("L: Incorrect parameters")
-
-          println("Line")
-          canvas.drawLine(c.params(0), c.params(1), c.params(2), c.params(3))
-
-        case "R" =>
-          if (c.params.length < 4) throw new IllegalArgumentException("L: Incorrect parameters")
-
-          println("Rectangle")
-          canvas.drawRect(c.params(0), c.params(1), c.params(2), c.params(3))
-
-        case _ => throw new IllegalArgumentException("Incorrect command format")
-      }
-
-      canvas
+      case _ => throw new IllegalArgumentException("Incorrect command format")
     }
+
+    canvas
   }
 }
