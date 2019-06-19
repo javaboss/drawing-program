@@ -5,9 +5,19 @@ abstract class AbstractCanvas(size: (Int, Int)) {
   protected val dimY = size._2 + 2
 
   protected val matrix = Array.ofDim[Char](dimY, dimX)
+
+  def print(): Unit = {
+    for (y <- 0 to dimY-1) {
+      var row: String = ""
+      for (x <- 0 to dimX-1) {
+        row += matrix(y)(x)
+      }
+      println(row)
+    }
+  }
 }
 
-class Canvas(size: (Int, Int)) extends AbstractCanvas(size)  {
+class Canvas(size: (Int, Int) = (0,0)) extends AbstractCanvas(size)  {
 
   val (width, height) = size
 
@@ -45,15 +55,4 @@ class Canvas(size: (Int, Int)) extends AbstractCanvas(size)  {
     drawLine(startX, startY+1, startX, endY-1)
     drawLine(endX, startY+1, endX, endY-1)
   }
-
-  def print(): Unit = {
-    for (y <- 0 to dimY-1) {
-      var row: String = ""
-      for (x <- 0 to dimX-1) {
-        row += matrix(y)(x)
-      }
-      println(row)
-    }
-  }
-
 }
